@@ -99,7 +99,7 @@ static int do_cgi(int s, const char *path, int is_method_get)
 	pid_t pid;
 	
 	setenv("METHOD", is_method_get ? "GET":"POST", 1);
-
+	
 	if ((pid = fork()) == -1) {
 		perror("fork()");
 		return -1;
@@ -113,6 +113,7 @@ static int do_cgi(int s, const char *path, int is_method_get)
 			perror("dup2(s, 1)");
 			exit(EXIT_FAILURE);
 		}
+		fprintf(stderr, "%s %d: exec /www/cgi-bin/cgi\n", __FUNCTION__, __LINE__);
 		execlp("/www/cgi-bin/cgi", "cgi", NULL);
 		exit(EXIT_FAILURE);
 	}
@@ -131,6 +132,7 @@ static void http_get_post(int s, char *path, int is_method_get)
 		strcpy(path, "index.html");
 	if (*path == '/')
 		path++;
+	__DBG("PATH:%s\n", path);
 	if ((fd = open(path, O_RDONLY)) == -1)
 		goto not_found;
 #define UHTTPD_CGI 1

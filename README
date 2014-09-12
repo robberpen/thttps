@@ -1,0 +1,7 @@
+this is sample for httpd implement
+make sure file /www/index.html is exist
+
+DIRECTORY:
+	tinyhttpd 	-  basic HTTP server for 8080 port by default
+	tinyhttpd_cgi 	-  sample code to support CGI interface
+	tinyhttpds	-  supporot certification HTTP + SSL
