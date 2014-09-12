@@ -1,0 +1,10 @@
+#!/bin/sh
+
+env >> /tmp/cgi.log
+echo "HTTP/1.1 200 OK"
+echo "Connection: close"
+echo "Content-Type: text/html"
+echo ""
+
+cat /www/cgi-bin/index.cgi
+
