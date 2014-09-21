@@ -1,0 +1,9 @@
+For ssl library head file, such as
+
+peter@peter-VirtualBox:tinyhttpds$ make
+cc -Wall -O2 -W -I../lib -DHTTPS_SUPPORT   -c -o main.o main.c
+main.c:21:26: fatal error: openssl/bio.h: No such file or directory
+compilation terminated.
+make: *** [main.o] Error 1
+
+peter@peter-VirtualBox:tinyhttpds$ sudo apt-get install libssl-dev
