@@ -7,3 +7,10 @@ compilation terminated.
 make: *** [main.o] Error 1
 
 peter@peter-VirtualBox:tinyhttpds$ sudo apt-get install libssl-dev
+peter@peter-VirtualBox:tinyhttpds$ make
+cc -Wall -O2 -W -I../lib -DHTTPS_SUPPORT main.o ../lib/socket.o -lresolv -o tinyhttpd -lssl
+/usr/bin/ld: main.o: undefined reference to symbol 'ERR_free_strings@@OPENSSL_1.0.0'
+//lib/i386-linux-gnu/libcrypto.so.1.0.0: error adding symbols: DSO missing from command line
+collect2: error: ld returned 1 exit status
+make: *** [all] Error 1
+

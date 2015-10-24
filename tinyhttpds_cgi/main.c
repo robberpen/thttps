@@ -237,10 +237,12 @@ static int do_cgi(req_t *req, const char *path, int is_method_get)
 			exit(EXIT_FAILURE);
 		}
 		close(to_cgi[1]);
+		close(to_cgi[0]);
 		if (dup2(from_cgi[1], 1) == -1) {
 			perror("dup2(s, 1)");
 			exit(EXIT_FAILURE);
 		}
+		close(from_cgi[1]);
 		close(from_cgi[0]);
 		close(req->sock_fd);
 		__DBG("child exec cgi\n");
@@ -252,6 +254,8 @@ static int do_cgi(req_t *req, const char *path, int is_method_get)
 	close(to_cgi[0]);
 	ssl_cgi_redirect(req, from_cgi[0], to_cgi[1]);
 	waitpid(pid, &status, 0);
+	close(from_cgi[0]);
+	close(to_cgi[1]);
 	return 0;
 }
 /*
@@ -283,9 +287,11 @@ static void http_get_post(req_t *req, char *path, int is_method_get)
 		http_send(req, buf, len);
 	}
 out:
+	close(fd);
 	close(req->sock_fd);
 	return;
 not_found:
+	close(fd);
 	http_puts(req, "HTTP/1.1 404 Not Found\r\n\r\n");
 }
 static void process_http(req_t *req)
@@ -354,6 +360,7 @@ static void main_loop(int server_socket_fd)
 #else
 		process_http(&req);
 		//shutdown(client_socket_fd, SHUT_RDWR);
+		close(client_socket_fd);
 #endif
 	}
 }
@@ -399,7 +406,9 @@ int main(int argc, char *argv[])
 	}
 	printf("port %d\n", port);
 	bzero(&saddrin, sizeof(struct sockaddr_in));
-	src = InetSockSrvInit("0.0.0.0", port, SOCK_STREAM ,&saddrin);
+	if ((src = InetSockSrvInit("0.0.0.0", port, SOCK_STREAM ,&saddrin)) < 0)
+		return EXIT_FAILURE;
+
 	
 	listen(src, 5);
 	main_loop(src);

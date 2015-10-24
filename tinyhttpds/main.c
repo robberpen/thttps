@@ -281,6 +281,7 @@ static void main_loop(int server_socket_fd)
 #else
 		process_http(&req);
 		//shutdown(client_socket_fd, SHUT_RDWR);
+		close(client_socket_fd);
 #endif
 	}
 }
@@ -326,8 +327,8 @@ int main(int argc, char *argv[])
 	}
 	printf("port %d\n", port);
 	bzero(&saddrin, sizeof(struct sockaddr_in));
-	src = InetSockSrvInit("0.0.0.0", port, SOCK_STREAM ,&saddrin);
-	
+	if ((src = InetSockSrvInit("0.0.0.0", port, SOCK_STREAM ,&saddrin)) < 0)
+		return EXIT_FAILURE;
 	listen(src, 5);
 	main_loop(src);
 	close(src);

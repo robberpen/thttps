@@ -1,5 +1,5 @@
 CFLAGS += -Wall -O2 -W -I../lib -DHTTPS_SUPPORT
-LDFLAGS += -lssl
+LDFLAGS += -lssl -lcrypto
 #OBJS= sockp.c socket.c tinydns.c
 OBJS= main.o ../lib/socket.o
 LIBS= -lresolv

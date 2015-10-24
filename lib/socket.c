@@ -149,8 +149,10 @@ SOCKET InetSockSrvInit(const char *host, unsigned short port, int type,
 		return -1;
 	}
 	if (type == SOCK_STREAM) {
-		bind(s, (struct sockaddr *) srvaddr,
-		     sizeof(struct sockaddr_in));
+		if (bind(s, (struct sockaddr *) srvaddr, sizeof(struct sockaddr_in)) == -1) {
+			perror("bind(2)");
+			return -1;
+		}
 	}
 	return s;
 }

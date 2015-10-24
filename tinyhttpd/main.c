@@ -122,7 +122,9 @@ static void main_loop(int server_socket_fd)
 		}
 #else
 		process_http(client_socket_fd);
-		shutdown(client_socket_fd, SHUT_RDWR);
+		/* XXX: don't do that! use close(2) instead of shutdown(2) */
+		//shutdown(client_socket_fd, SHUT_RDWR);
+		close(client_socket_fd);
 #endif
 	}
 }
@@ -136,11 +138,12 @@ int main(int argc, char *argv[])
 
 
 	if (chdir(DOC_ROOT) == -1) {
-		fprintf(stderr, "can not chdir(%s) error: %s", strerror(errno));
+		fprintf(stderr, "can not chdir(%s) error: %s", DOC_ROOT, strerror(errno));
 		return 0;
 	}
 	bzero(&saddrin, sizeof(struct sockaddr_in));
-	src = InetSockSrvInit("0.0.0.0", 8080, SOCK_STREAM ,&saddrin);
+        if ((src = InetSockSrvInit("0.0.0.0", port, SOCK_STREAM ,&saddrin)) < 0)
+                return EXIT_FAILURE;
 	
 	listen(src, 5);
 	main_loop(src);
