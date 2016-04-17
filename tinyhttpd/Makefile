@@ -15,4 +15,4 @@ built-in.o: $(OBJS)
 	$(LD) -r -o $@ $(OBJS)
 	
 clean:
-	rm -f main *.o tinyhttpd
+	rm -f main *.o tinyhttpd $(OBJS)
