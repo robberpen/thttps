@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
 	struct in_addr inp;
 	int rev = -1, src;
 	int optval = 1;
-
+	unsigned short int port = 8080;
 
 	if (chdir(DOC_ROOT) == -1) {
 		fprintf(stderr, "can not chdir(%s) error: %s", DOC_ROOT, strerror(errno));
