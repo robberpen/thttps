@@ -1,2 +1,4 @@
 export OPENSSL_CONF=${PWD}/openssl.cnf
-openssl req  -nodes -new -x509  -keyout server.key -out server.cert
+# to generate self-signed certification fot https
+	export OPENSSL_CONF=${PWD}/openssl.cnf
+	openssl req  -nodes -new -x509  -keyout server.key -out server.cert -days 3600
